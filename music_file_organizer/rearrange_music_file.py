@@ -1,11 +1,13 @@
 import argparse
 import os
 import re
+import shutil
 
 from detect_music_frequency_cutoff import detect_mp3_frequency_cutoff
 
 
-SUPPORT_FORMAT = ["mp3", "wav"]
+# SUPPORT_FORMAT = ["mp3"]
+SUPPORT_FORMAT = ["mp3", "wav", "flac", "m4a"]
 
 
 def move_music_files(file, source_directory, destination_directory):
@@ -14,7 +16,8 @@ def move_music_files(file, source_directory, destination_directory):
     if os.path.exists(music_file_source_path):
         if not os.path.isdir(destination_directory):
             os.mkdir(destination_directory)
-        os.rename(music_file_source_path, music_file_dest_path)
+        print("Moving {} to {}".format(file, destination_directory))
+        shutil.move(music_file_source_path, music_file_dest_path)
 
 
 def rearrange_music_files_by_freq_cutoff(directory):
@@ -27,7 +30,6 @@ def rearrange_music_files_by_freq_cutoff(directory):
         destination_dir = directory + '\\{}k'.format(frequency_cutoff // 1000)
         if frequency_cutoff > 20000:
             destination_dir = directory + '\\20k+'
-        print("Moving {} to {}".format(music_file, destination_dir))
         move_music_files(music_file, directory, destination_dir)
 
 
@@ -56,13 +58,13 @@ def validate_existed_result(result_dir):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('directory', metavar='D', type=str, help='Directory cotains music files to be rearrange')
-    parser.add_argument('--validate_only', type=bool, required=False, default=False,
+    parser.add_argument('--validate', type=bool, required=False, default=False,
                         help='Only validate result or not. False by default.')
     args = parser.parse_args()
     if not os.path.exists(args.directory):
         raise
 
-    if args.validate_only:
+    if args.validate:
         validate_existed_result(args.directory)
         return
 
