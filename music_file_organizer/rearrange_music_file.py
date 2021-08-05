@@ -6,7 +6,6 @@ import shutil
 from detect_music_frequency_cutoff import detect_mp3_frequency_cutoff
 
 
-# SUPPORT_FORMAT = ["mp3"]
 SUPPORT_FORMAT = ["mp3", "wav", "flac", "m4a"]
 
 
